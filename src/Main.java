@@ -10,11 +10,13 @@ public class Main {
         System.out.println("Welcome to the (X,O) board game");
         String [][] boardGame ={{"1","2","3"},{"4","5","6"},{"7","8","9"}};
 
+
         String [] players = getPlayers();
 
         int userInput =0;
         int countPlays =0;
 
+        String winner ="";
         printBoardGame(boardGame);
         do {
             System.out.println("please enter your position ");
@@ -35,20 +37,32 @@ public class Main {
             boardGame[Position[0]][Position[1]]=players[0];
             countPlays++;
 
-            if(checkWin(boardGame)){
-
+            winner = checkWin(boardGame);
+            if(winner != ""){
+                System.out.println(winner);
+                printBoardGame(boardGame);
+                break;
             }
 
             if(countPlays <9){
                 boardGame =computerPLay(boardGame,players);
                 countPlays++;
+                winner = checkWin(boardGame);
+                if(winner != ""){
+                    System.out.println(winner);
+                    printBoardGame(boardGame);
+                    break;
+                }
             }
 
 
 
 
             printBoardGame(boardGame);
-            if(countPlays == 9)break;
+            if(countPlays == 9){
+                System.out.println("Is draw");
+                break;
+            }
         }while (true);
 
 
@@ -128,23 +142,55 @@ public class Main {
         }while (true);
         return boardGame;
     }
-    public static boolean checkWin(String[][] boardGame){
+    public static String checkWin(String[][] boardGame){
         int countRepetition = 0;
         String playerCheck ="";
         for (int i = 0; i < boardGame.length; i++) {
-            for (int j = 0; j < boardGame[i].length; j++) {
+            countRepetition= 0;
 
-                if(j == 0 ){
-                    playerCheck = boardGame[i][j].equals("X")  ? "X" : "O";
-                    countRepetition= 0;
+            // check horizontal
+            for (int h = 0; h < boardGame[i].length; h++) {
+
+                if(h == 0 ){
+                    playerCheck = boardGame[i][h].equals("X")  ? "X" : "O";
                 }
-                if (playerCheck == boardGame[i][j]) {
+                if (playerCheck.equals(boardGame[i][h])) {
                     countRepetition++;
                 }
             }
             if (countRepetition == 3) break;
+
+            countRepetition = 0;
+            // check vertical
+            for(int v = 0; v < boardGame[i].length; v++){
+                if(v == 0 ){
+                    playerCheck = boardGame[v][i].equals("X")  ? "X" : "O";
+                }
+                if (playerCheck.equals(boardGame[v][i]) ) {
+                    countRepetition++;
+                }
+            }
+            if (countRepetition == 3) break;
+
         }
-        return countRepetition == 3;
+        if(countRepetition == 3){
+            return playerCheck+ " win the game";
+        }
+        // check cross X win
+        else if(((boardGame[0][0].equals("X") && boardGame[1][1].equals("X") && boardGame[2][2].equals("X")) ||
+                (boardGame[2][0].equals("X") && boardGame[1][1].equals("X") && boardGame[0][2].equals("X")))){
+            return "X win the game ";
+
+        }
+        // check cross O win
+        else if (((boardGame[0][0].equals("O") && boardGame[1][1].equals("O") && boardGame[2][2].equals("O")) ||
+                (boardGame[2][0].equals("O") && boardGame[1][1].equals("O") && boardGame[0][2].equals("O")))){
+            return "O win the game ";
+
+        }else{
+            return "";
+        }
+
     }
 
 
