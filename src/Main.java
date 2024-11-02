@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -6,18 +7,80 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome to the (X,O) board game");
+
+        ArrayList<String> games = new ArrayList<String>();
+        int scorePlayerOne = 0;
+        int scorePlayerTow =0;
+
+        do {
+            System.out.println("please type 1 to play one round and type 2 to play best of there rounds");
+
+            int gameType = input.nextInt();
+
+
+
+
+            if(gameType == 1){
+
+                RunGame( "win the game");
+                break;
+            }else if(gameType== 2){
+                String printrounds ="";
+
+                for (int i =0 ; i < 3;i++){
+
+                    if(i != 0){
+                        System.out.println("Start round "+(i+1));
+                    }
+                    String []round = RunGame( "win the round");
+                    if(round[1] == "Is draw"){
+                        i--;
+                        continue;
+                    }
+                    games.add(round[0]);
+                    if(round[1] == "Player One"){
+                        scorePlayerOne++;
+                    }else scorePlayerTow++;
+                    if(scorePlayerOne >=2){
+                        System.out.println("All the rounds plays : ");
+                        for (String item : games){
+
+                            printrounds +=item+"\n  -  ";
+                        }
+                        System.out.println(printrounds);
+                        System.out.println("Player One win the game \n the score is :"+scorePlayerOne +"-"+scorePlayerTow);
+                    }
+                }
+
+
+                break;
+            }else {
+                System.out.println("invalid input");
+            }
+        }while (true);
+
+
+
+
+
+
+
+    }
+
+    public static String [] RunGame( String typeGame){
         String [][] boardGame ={{"1","2","3"},{"4","5","6"},{"7","8","9"}};
-
-
+        Scanner input = new Scanner(System.in);
         String [] players = getPlayers();
+        String [] game = new String[2];
 
         int userInput =0;
         int countPlays =0;
 
         String winner ="";
-        printBoardGame(boardGame);
+        System.out.println(printBoardGame(boardGame));
         do {
             System.out.println("please enter your position ");
 
@@ -30,7 +93,7 @@ public class Main {
             int Position[] = getBoardPosition(userInput);
 
             if(boardGame[Position[0]][Position[1]].equals("X") || boardGame[Position[0]][Position[1]].equals("O")){
-                printBoardGame(boardGame);
+                System.out.println(printBoardGame(boardGame));
                 System.out.println("this position already taken :"+userInput);
                 continue;
             }
@@ -39,8 +102,10 @@ public class Main {
 
             winner = checkWin(boardGame);
             if(winner != ""){
-                System.out.println(winner);
-                printBoardGame(boardGame);
+                game[0] = printBoardGame(boardGame);
+                game[1] = "Player One";
+                System.out.println(game[0]);
+                System.out.println(winner+" "+typeGame);
                 break;
             }
 
@@ -49,29 +114,28 @@ public class Main {
                 countPlays++;
                 winner = checkWin(boardGame);
                 if(winner != ""){
-                    System.out.println(winner);
-                    printBoardGame(boardGame);
+                    game[0] = printBoardGame(boardGame);
+                    game[1] = "Computer";
+                    System.out.println(game[0]);
+                    System.out.println(winner+" "+typeGame);
                     break;
                 }
             }
 
 
-
-
-            printBoardGame(boardGame);
+            System.out.println(printBoardGame(boardGame));
             if(countPlays == 9){
+                game[1] = "Is draw";
                 System.out.println("Is draw");
                 break;
             }
         }while (true);
 
 
-
-
+        return  game;
     }
-
-    public static void printBoardGame(String [][] boardGame){
-
+    public static String printBoardGame(String [][] boardGame){
+        String board = "";
         String boardRows = "";
         for(int i=0;i<boardGame.length;i++){
             boardRows = "";
@@ -80,10 +144,11 @@ public class Main {
                 if(j == boardGame[i].length-1)continue;
                 boardRows += "│";
             }
-            System.out.println(boardRows);
+            board += "\n"+boardRows;
             if(i == boardGame.length-1)continue;
-            System.out.println("━━━━━");
+            board+= "\n"+"━━━━━";
         }
+        return board;
     }
 
     public static String[] getPlayers(){
@@ -174,18 +239,18 @@ public class Main {
 
         }
         if(countRepetition == 3){
-            return playerCheck+ " win the game";
+            return playerCheck;
         }
         // check cross X win
         else if(((boardGame[0][0].equals("X") && boardGame[1][1].equals("X") && boardGame[2][2].equals("X")) ||
                 (boardGame[2][0].equals("X") && boardGame[1][1].equals("X") && boardGame[0][2].equals("X")))){
-            return "X win the game ";
+            return "X";
 
         }
         // check cross O win
         else if (((boardGame[0][0].equals("O") && boardGame[1][1].equals("O") && boardGame[2][2].equals("O")) ||
                 (boardGame[2][0].equals("O") && boardGame[1][1].equals("O") && boardGame[0][2].equals("O")))){
-            return "O win the game ";
+            return "O";
 
         }else{
             return "";
