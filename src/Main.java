@@ -19,6 +19,7 @@ public class Main {
         do {
             System.out.println("please type 1 to play one round and type 2 to play best of there rounds");
 
+
             int gameType = input.nextInt();
 
 
@@ -99,7 +100,10 @@ public class Main {
             userInput = input.nextInt();
 
 
-            if (userInput < 1 || userInput > 9) System.out.println("Please enter a number between 1 and 9");
+            if (userInput < 1 || userInput > 9){
+                System.out.println("Please enter a number between 1 and 9");
+                continue;
+            }
 
 
             int Position[] = getBoardPosition(userInput);
