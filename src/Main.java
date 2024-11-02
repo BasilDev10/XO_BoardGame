@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -46,13 +47,24 @@ public class Main {
                     }else scorePlayerTow++;
                     if(scorePlayerOne >=2){
                         System.out.println("All the rounds plays : ");
-                        for (String item : games){
 
-                            printrounds +=item+"\n  -  ";
-                        }
+                        printrounds = games.stream()
+                                .map(Object::toString)
+                                .collect(Collectors.joining("\n---------"));
                         System.out.println(printrounds);
                         System.out.println("Player One win the game \n the score is :"+scorePlayerOne +"-"+scorePlayerTow);
+                        break;
+                    }else if(scorePlayerTow >=2){
+                        System.out.println("All the rounds plays : ");
+
+                        printrounds = games.stream()
+                                .map(Object::toString)
+                                .collect(Collectors.joining("\n---------"));
+                        System.out.println(printrounds);
+                        System.out.println("Computer win the game \n the score is :"+scorePlayerOne +"-"+scorePlayerTow);
+                        break;
                     }
+
                 }
 
 
